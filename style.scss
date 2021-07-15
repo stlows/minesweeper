@@ -5,11 +5,18 @@ body{
 .row {
     display: flex;
 }
+.grid-container {
+    max-width: 1000px;
+    margin: auto;
+    .headbar {
+        display: flex;
+        justify-content: space-between;
+    }
+}
 .grid {
     position: relative;
-    max-width: 1000px;
     overflow: hidden;
-    margin: auto;
+    width: 100%;
     &:after {
         position: absolute;
         content: 'Game Over';
@@ -38,8 +45,9 @@ body{
     cursor: pointer;
     //border-top: 1px solid #121212;
     //border-right: 1px solid #121212;
-    width: 30px;
-    height: 30px;
+    width: 100%;
+    aspect-ratio: 1;
+    //height: 30px;
     //padding-bottom: 1.5%;
     //padding-top: 1.5%;
     display: flex;
@@ -74,7 +82,10 @@ body{
     }
     }
     &.flag {
-        background: yellow;
+        background: rgb(255, 255, 255);
+    }
+    &.bomb {
+        background: rgb(236, 195, 195);
     }
     
     

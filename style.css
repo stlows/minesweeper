@@ -8,11 +8,24 @@ body {
   display: flex;
 }
 
+.grid-container {
+  max-width: 1000px;
+  margin: auto;
+}
+
+.grid-container .headbar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
 .grid {
   position: relative;
-  max-width: 1000px;
   overflow: hidden;
-  margin: auto;
+  width: 100%;
 }
 
 .grid:after {
@@ -50,8 +63,8 @@ body {
 
 .tile {
   cursor: pointer;
-  width: 30px;
-  height: 30px;
+  width: 100%;
+  aspect-ratio: 1;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -92,6 +105,10 @@ body {
 }
 
 .tile.flag {
-  background: yellow;
+  background: white;
+}
+
+.tile.bomb {
+  background: #ecc3c3;
 }
 /*# sourceMappingURL=style.css.map */
