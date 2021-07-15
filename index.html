@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <h1>{{title}}</h1>
+        <div>
+            <div>
+                <label for="width">Width</label>
+                <input type="text" v-model="options.w">
+            </div>
+            <div>
+                <label for="height">Height</label>
+                <input type="text" v-model="options.h">
+            </div>
+            <div>
+                <label for="mines">Mines</label>
+                <input type="text" v-model="options.mines">
+            </div>
+            <div>
+                <label for="lives">Lives</label>
+                <input type="text" v-model="options.lives">
+            </div>
+            <button @click="newGame()">New Game</button>
+        </div>
+        <div>
+            <span>Flag: {{tiles.flat().filter(t => t.isFlag).length}}</span>
+            <div>
+                <span v-for="life in lives">H</span>
+                <span v-for="life in options.lives - lives">X</span>
+            </div>
+        </div>
+        <div class="grid" :class="[{dead: lives == 0}]">
+            <div v-for="row in tiles" class="row">
+                <div v-for="tile in row" class="tile" :class="[{flag: tile.isFlag, open: tile.isOpen}, 'bomb-' + tile.bombs]" @click.left="leftClick(tile.x, tile.y)" @click.right.prevent="rightClick(tile.x, tile.y)">
+                    <span v-show="tile.isOpen && tile.bombs > 0">{{tile.bombs}}</span>
+                </div>
+            </div>
+        </div>
+        
+
+           
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="app.js"></script>
+   
+</body>
+</html>
