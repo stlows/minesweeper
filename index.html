@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Minesweeper by Vincent Beaulieu</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,7 +12,7 @@
 <body>
     <div id="app">
         <h1>{{title}}</h1>
-        <div>
+        <div v-show="optionsToggle" class="modal">
             <div>
                 <label for="width">Width</label>
                 <input type="text" v-model="options.w">
@@ -32,7 +32,15 @@
             <button @click="newGame()">New Game</button>
         </div>
         <div class="grid-container">
+            <button @click="optionsToggle = !optionsToggle">Options</button>
+            <button @click="openAll">Solution</button>
             <div class="headbar">
+                <span>
+                    Timer: {{prettyTimer}}
+
+                    <a v-if="timerId" href="#" @click="stopTimer()">⏸</a>
+                    <a v-else href="#" @click="startTimer()">▶</a>
+                </span>
                 <span>Mines left: {{ minesLeft }}</span>
                 <div>
                     <span>Lives:</span>
@@ -40,15 +48,18 @@
                     <span v-for="life in options.lives - lives">❌</span>
                 </div>
             </div>
-            <div class="grid" :class="[{dead: lives == 0}]">
-                <div v-for="row in tiles" class="row">
-                    <div v-for="tile in row" class="tile" :class="[{flag: tile.isFlag, open: tile.isOpen, bomb: tile.isOpen && tile.isBomb}, 'bomb-' + tile.bombs]" @click.left="leftClick(tile.x, tile.y)" @click.right.prevent="rightClick(tile.x, tile.y)">
-                        <span v-show="tile.isOpen && tile.bombs > 0">{{tile.bombs}}</span>
-                        <span v-show="tile.isFlag">💢</span>
-                        <span v-show="tile.isOpen && tile.isBomb">💥</span>
+            <div class="grid-back">
+                <div class="grid" :class="[{dead: lives == 0}]">
+                    <div v-for="row in tiles" class="row">
+                        <div v-for="tile in row" class="tile" :class="[{flag: tile.isFlag, open: tile.isOpen, bomb: tile.isOpen && tile.isBomb}, 'bomb-' + tile.bombs]" @click.left="leftClick(tile.x, tile.y)" @click.right.prevent="rightClick(tile.x, tile.y)">
+                            <span v-show="tile.isOpen && tile.bombs > 0">{{tile.bombs}}</span>
+                            <span v-show="tile.isFlag">💢</span>
+                            <span v-show="tile.isOpen && tile.isBomb">💥</span>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
 

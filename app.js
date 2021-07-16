@@ -3,15 +3,19 @@ new Vue({
     data: {
         title: "Minesweeper",
         options: {
-            w: 30,
-            h: 16,
-            mines: 50,
+            w: 5,
+            h: 5,
+            mines: 1,
             lives: 3
         },
         tiles: [],
         lives: 0,
+        optionsToggle: false,
+        timer: 0,
+        timerId: 0
     },
     created() {
+        this.setOptions()
         this.newGame()
     },
     computed: {
@@ -26,9 +30,41 @@ new Vue({
         },
         minesLeft() {
             return this.options.mines - this.flags - this.openedBombs
+        },
+        totalTiles() {
+            return this.options.w * this.options.h
+        },
+        splitTimer() {
+            let h = Math.floor(this.timer / 3600)
+            let m = Math.floor((this.timer - h * 3600) / 60)
+            let s = Math.floor((this.timer - h * 3600 - m * 60))
+            return { h, m, s }
+        },
+        prettyTimer() {
+            return this.format(this.splitTimer.h) + ":" + this.format(this.splitTimer.m) + ":" + this.format(this.splitTimer.s)
         }
+
     },
     methods: {
+        format(time) {
+            return (time < 10 ? "0" : "") + time
+        },
+        setOptions() {
+            let uri = window.location.search.substring(1);
+            let params = new URLSearchParams(uri);
+            if (params.has("w")) {
+                this.options.w = Math.min(40, parseInt(params.get("w")))
+            }
+            if (params.has("h")) {
+                this.options.h = Math.min(40, parseInt(params.get("h")))
+            }
+            if (params.has("m")) {
+                this.options.mines = Math.min(this.options.w * this.options.h, parseInt(params.get("m")))
+            }
+            if (params.has("l")) {
+                this.options.lives = Math.min(10, parseInt(params.get("l")))
+            }
+        },
         newGame() {
             this.tiles = []
             this.lives = this.options.lives
@@ -58,7 +94,22 @@ new Vue({
                     }
                 }
             }
+            this.stopTimer()
+            this.resetTimer()
+            this.startTimer()
 
+        },
+        startTimer() {
+            this.timerId = setInterval(() => {
+                this.timer++
+            }, 1000)
+        },
+        resetTimer() {
+            this.timer = 0
+        },
+        stopTimer() {
+            clearInterval(this.timerId)
+            this.timerId = null
         },
         bombAround(x, y) {
             let bombs = 0
@@ -83,16 +134,18 @@ new Vue({
             return tiles;
         },
         leftClick(x, y) {
-
             if (!this.tiles[y][x].isOpen) {
                 this.openTile(x, y, [])
             }
+            this.verify()
         },
         rightClick(x, y) {
             if (!this.tiles[y][x].isOpen) {
                 this.tiles[y][x].isFlag = !this.tiles[y][x].isFlag
             }
+            this.verify()
         },
+
         openTile(x, y, opened) {
             if (this.tiles[y][x].isFlag) {
                 return
@@ -115,6 +168,19 @@ new Vue({
             }
 
 
+        },
+        verify() {
+            if (this.minesLeft == 0 && this.opened + this.flags == this.totalTiles) {
+                console.log("Checking ")
+            }
+        },
+        openAll() {
+            this.stopTimer()
+            for (let i = 0; i < this.options.h; i++) {
+                for (let j = 0; j < this.options.w; j++) {
+                    this.tiles[i][j].isOpen = true
+                }
+            }
         }
 
     }

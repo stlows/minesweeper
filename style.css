@@ -8,6 +8,11 @@ body {
   display: flex;
 }
 
+h1 {
+  text-align: center;
+  margin: 0;
+}
+
 .grid-container {
   max-width: 1000px;
   margin: auto;
@@ -20,12 +25,27 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  background-color: #745656;
+  padding: 10px 1rem;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: white;
+}
+
+.grid-back {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background: #121212;
+  padding: 20px;
 }
 
 .grid {
   position: relative;
   overflow: hidden;
-  width: 100%;
 }
 
 .grid:after {
@@ -64,6 +84,7 @@ body {
 .tile {
   cursor: pointer;
   width: 100%;
+  width: 25px;
   aspect-ratio: 1;
   display: -webkit-box;
   display: -ms-flexbox;
